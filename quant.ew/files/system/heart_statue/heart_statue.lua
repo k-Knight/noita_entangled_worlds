@@ -290,7 +290,7 @@ local function run_away_from_player(entity_id)
     end
 
     if not any_leg_attached then
-        PhysicsApplyForce(entity_id, 0, 12)
+        PhysicsApplyForce(entity_id, 0, 50)
         force_magnitude = force_magnitude * 0.25
     end
     local fx = (dx / dist) * force_magnitude
