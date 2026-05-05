@@ -271,7 +271,7 @@ local function run_away_from_player(entity_id)
     local closest_player = get_closest_real_player(entity_id)
     if closest_player then
         px, py = EntityGetTransform(closest_player)
-        force_magnitude = 20
+        force_magnitude = 40
     end
 
     if px then
@@ -286,7 +286,7 @@ local function run_away_from_player(entity_id)
         dx = x - px
         dy = y - py
         dist = math.sqrt(dx*dx + dy*dy)
-        force_magnitude = 15
+        force_magnitude = 30
     end
 
     if not any_leg_attached then
@@ -295,7 +295,7 @@ local function run_away_from_player(entity_id)
     end
     local fx = (dx / dist) * force_magnitude
     local fy = (dy / dist) * force_magnitude
-    fy = (fy < 2) and (fy - 4) or fy
+    fy = (fy < 4) and (fy - 8) or fy
     PhysicsApplyForce(entity_id, fx, fy)
     PhysicsApplyTorque(entity_id, (rot) * -10)
 

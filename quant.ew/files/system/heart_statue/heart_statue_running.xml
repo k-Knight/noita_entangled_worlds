@@ -193,7 +193,7 @@
         smooth_filtering="1"
         fog_of_war_hole="1"
         has_special_scale="true"
-        special_scale_x="5.5"
-        special_scale_y="5.5" >
+        special_scale_x="7.5"
+        special_scale_y="7.5" >
     </SpriteComponent>
 </Entity>
