@@ -7,8 +7,8 @@
 		length="30" >
 	</IKLimbComponent>
 
-	<SpriteComponent 
-		image_file="mods/quant.ew/files/system/heart_statue/heart_statue_limb_a_long.png" 
+	<SpriteComponent
+		image_file="mods/quant.ew/files/system/heart_statue/heart_statue_limb_a_long.png"
 		z_index="1.1"
 		offset_x="0"
 		offset_y="5"
@@ -16,8 +16,8 @@
 		update_transform_rotation="0" >
 	</SpriteComponent>
 
-	<SpriteComponent 
-		image_file="mods/quant.ew/files/system/heart_statue/heart_statue_limb_b_long.png" 
+	<SpriteComponent
+		image_file="mods/quant.ew/files/system/heart_statue/heart_statue_limb_b_long.png"
 		z_index="1.1"
 		offset_x="0"
 		offset_y="5"
@@ -25,8 +25,8 @@
 		update_transform_rotation="0" >
 	</SpriteComponent>
 
-	<SpriteComponent 
-		image_file="mods/quant.ew/files/system/heart_statue/heart_statue_knee.png" 
+	<SpriteComponent
+		image_file="mods/quant.ew/files/system/heart_statue/heart_statue_knee.png"
 		z_index="1.1"
 		offset_x="4"
 		offset_y="4"

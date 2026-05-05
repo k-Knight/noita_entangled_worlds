@@ -22,13 +22,6 @@
         ></SpriteComponent>
     </Base>
 
-    <LuaComponent
-        execute_on_added="0"
-        remove_after_executed="1"
-        execute_every_n_frame="180"
-        script_source_file="mods/quant.ew/files/system/heart_statue/start_movement.lua"
-    ></LuaComponent>
-
     <PathFindingComponent
         _tags="enabled_in_world"
         distance_to_reach_node_x="20"
@@ -49,9 +42,9 @@
 
     <PathFindingGridMarkerComponent
         _tags="enabled_in_world"
-        _enabled="1" 
-        marker_offset_x="0" 
-        marker_offset_y="-10" 
+        _enabled="1"
+        marker_offset_x="0"
+        marker_offset_y="-10"
         marker_work_flag="16" >
     </PathFindingGridMarkerComponent>
 
@@ -187,7 +180,7 @@
         value_bool="1"
     ></VariableStorageComponent>
 
-    <SpriteComponent 
+    <SpriteComponent
         _tags="enabled_in_world"
         image_file="data/particles/fog_of_war_hole.xml"
         smooth_filtering="1"
