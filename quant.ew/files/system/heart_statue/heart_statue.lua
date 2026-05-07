@@ -108,7 +108,7 @@ function rpc.got_thrown(peer_id, phys_transform)
 
     local owner_peer_id = player_fns.get_player_data_by_local_entity_id(item).peer_id
     if owner_peer_id == ctx.my_player.peer_id then
-        EntityRemoveTag(item, "ew_hs_moving")
+        rpc.disable_running(ctx.my_player.peer_id)
         ctx.my_player.heart_statue_running_data.running_start_frame = GameGetFrameNum() + 180
     end
 
@@ -203,6 +203,13 @@ function rpc.spawn_pedestal(x, y)
     end)
 end
 
+rpc.opts_everywhere()
+rpc.opts_reliable()
+function rpc.disable_running(peer_id)
+    local entity_id = ctx.players[peer_id].entity
+    EntityRemoveTag(entity_id, "ew_hs_moving")
+end
+
 util.add_cross_call("ew_heart_statue_spawn_pedestal", function(entity_id)
     local x, y = EntityGetTransform(entity_id)
     local owner_peer_id = player_fns.get_player_data_by_local_entity_id(entity_id).peer_id
@@ -270,13 +277,6 @@ local function run_away_from_player(data, entity_id)
     local dist = math.abs((data.last_x - x) + (data.last_y - y))
     local max_vel_diff_x = math.max(0, 75 - math.abs(vel_x))
     local max_vel_diff_y = math.max(0, 75 - math.abs(vel_y))
-
-    if dist > 10 then
-        -- teleport detected (seen this bug happen once)
-        x = data.last_x
-        y = data.last_y
-        EntitySetTransform(entity_id, x, y)
-    end
 
     if dist < 0.25 then
         dist_accum = dist_accum + dist
@@ -374,7 +374,7 @@ function heart_statue.on_world_update()
     if root ~= entity_id then
         if GameGetFrameNum() % 60 == 53 then
             rpc.remove_cape(ctx.my_player.peer_id)
-            EntityRemoveTag(entity_id, "ew_hs_moving")
+            rpc.disable_running(ctx.my_player.peer_id)
 
             if data ~= nil then
                 rpc.ensure_held(data.peer_id)
