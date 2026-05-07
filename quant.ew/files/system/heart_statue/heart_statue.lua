@@ -133,7 +133,9 @@ end)
 
 util.add_cross_call("ew_heart_statue_pickup", function(item)
     if item then
-        rpc.remove_cape(player_fns.get_player_data_by_local_entity_id(item).peer_id)
+        local peer_id = player_fns.get_player_data_by_local_entity_id(item).peer_id
+        rpc.remove_cape(peer_id)
+        rpc.disable_running(peer_id)
     end
 
     local inventory_state = player_fns.serialize_items(ctx.my_player)
@@ -219,6 +221,7 @@ util.add_cross_call("ew_heart_statue_spawn_pedestal", function(entity_id)
     end
 
     if owner_peer_id == ctx.my_player.peer_id then
+        rpc.disable_running(owner_peer_id)
         rpc.add_player_cape_for_fun(owner_peer_id)
         if not ctx.my_player.heart_statue_running_data then
             ctx.my_player.heart_statue_running_data = {
