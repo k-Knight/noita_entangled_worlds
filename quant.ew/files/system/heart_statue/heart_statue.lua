@@ -79,7 +79,6 @@ local function add_legs(entity)
         for i = 1, 5 do
             local leg = EntityLoad("mods/quant.ew/files/system/heart_statue/heart_statue_leg.xml", x, y)
             local limb_component = EntityGetFirstComponentIncludingDisabled(leg, "IKLimbComponent")
-            print("limb_component :: " .. tostring(limb_component))
             if limb_component then
                 ComponentSetValue2(limb_component, "end_position", x, y)
                 ComponentSetValue2(limb_component, "mJointWorldPos", x, y)
@@ -257,12 +256,27 @@ local function run_away_from_player(data, entity_id)
         any_leg_attached = ComponentGetValue2(ik_animator, "mHasGroundAttachmentOnAnyLeg")
     end
 
+    local velocity_comp = EntityGetFirstComponent(entity_id, "VelocityComponent")
+    local vel_x, vel_y = 0, 0
+    if velocity_comp ~= nil then
+        vel_x, vel_y = ComponentGetValue2(velocity_comp, "mVelocity")
+    end
+
     local x, y, rot = EntityGetTransform(entity_id)
-    local force_magnitude
+    local force_magnitude_x, force_magnitude_y = 0, 0
     local px, py
     local dx, dy
     local prob_mult = 1.0
-    local dist = math.abs(data.last_x - x + data.last_y - y)
+    local dist = math.abs((data.last_x - x) + (data.last_y - y))
+    local max_vel_diff_x = math.max(0, 75 - math.abs(vel_x))
+    local max_vel_diff_y = math.max(0, 75 - math.abs(vel_y))
+
+    if dist > 10 then
+        -- teleport detected (seen this bug happen once)
+        x = data.last_x
+        y = data.last_y
+        EntitySetTransform(entity_id, x, y)
+    end
 
     if dist < 0.25 then
         dist_accum = dist_accum + dist
@@ -290,13 +304,15 @@ local function run_away_from_player(data, entity_id)
     local closest_player = get_closest_real_player(entity_id)
     if closest_player then
         px, py = EntityGetTransform(closest_player)
-        force_magnitude = 40
+        force_magnitude_x = max_vel_diff_x * 1.5
+        force_magnitude_y = max_vel_diff_y * 1.5
     end
 
     if px then
         dx = x - px
         dy = y - py
         dist = math.sqrt(dx*dx + dy*dy)
+        dy = dy / 4
     end
 
     if (not closest_player) or (dist > 100) or (not px) then
@@ -305,16 +321,18 @@ local function run_away_from_player(data, entity_id)
         dx = x - px
         dy = y - py
         dist = math.sqrt(dx*dx + dy*dy)
-        force_magnitude = 30
+        force_magnitude_x = max_vel_diff_x
+        force_magnitude_y = max_vel_diff_y
     end
 
     if not any_leg_attached then
-        PhysicsApplyForce(entity_id, 0, 50)
-        force_magnitude = force_magnitude * 0.25
+        PhysicsApplyForce(entity_id, 0, 15)
+        force_magnitude_x = force_magnitude_x * 0.15
+        force_magnitude_y = force_magnitude_y * 0.15
     end
-    local fx = (dx / dist) * force_magnitude
-    local fy = (dy / dist) * force_magnitude
-    fy = (fy < 4) and (fy - 8) or fy
+    local fx = (dx / dist) * force_magnitude_x
+    local fy = (dy / dist) * force_magnitude_y
+    fy = (fy < 4) and (fy - 11) or fy
     PhysicsApplyForce(entity_id, fx, fy)
     PhysicsApplyTorque(entity_id, (rot) * -10)
 
